@@ -1,0 +1,47 @@
+<% include partials/header %>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+ <div class="container">
+    <a class="navbar-brand" href="#"> YelpCamp </a>
+
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="#">Signin</a>
+      </li>
+    </ul>
+ </div>
+</nav>
+
+<!-- ##################### container ############################ -->
+<div class="container">
+    
+    
+<header class="jumbotron">
+    <div class="container">
+         <h1>Welcome To YelpCamp!</h1>
+        <a class="btn btn-lg btn-primary "href="/campground/new">Add new campground </a>
+    </div>
+</header>
+
+<div class="row text-center" style="display:flex; flex-wrap:wrap;">
+   <% campGrounds.forEach((camp)=>{ %>
+         <div class="col-lg-4 col-md-12 col-sm-12">
+             <div class="img-thumbnail" >
+                  <img src= "<%= camp.image %>" class="img-thumbnail" style="border:none;" >
+                  <div class="caption">
+                     <p> <%= camp.name %> </p>  
+                  </div>
+             </div>
+         </div>   
+    <% });%>
+</div>
+
+</div>
+
+
+
+
+<% include partials/footer %>
