@@ -1,23 +1,6 @@
 <% include partials/header %>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-header" href="/">YelpCamp</a>
-        </div>
-        
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Login</a></li>
-                <li><a href="/">Signin</a></li>
-                <li><a href="/">Logout</a></li>
-            </ul>
-            
-        </div>
-        
-    </div>
-    
-</nav>
+
 
 
 <div class="container">
@@ -39,6 +22,9 @@
                  <div class="caption">
                      <h4 ><%= camp.name %></h4>
                  </div>
+                 <p>
+                     <a href="/campground/<%= camp._id%>" class="btn btn-lg btn-primary">More Info</a>
+                 </p>
              </div>
                     
          </div>
