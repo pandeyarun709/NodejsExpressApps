@@ -1,0 +1,22 @@
+<% include partials/header %>
+
+
+
+<h1>All blogs here</h1>
+
+
+<% blogs.forEach(function(blog){ %>
+    
+    <div>
+         <%= blog.title %>
+          <img src="<%= blog.image %>"> <br>
+           <p> <%= blog.body.substring(0 , 50) %> ..... </p>
+           <span> <%= blog.created %> </span>
+           <a href="/blogs/<%= blog._id %>"> Read More</a>
+    </div>
+    
+  
+
+<% }); %>
+
+<% include partials/footer %>
