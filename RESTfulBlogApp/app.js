@@ -2,13 +2,16 @@ var    express  =   require("express"),
            app  =   express(),
     bodyParser  =   require("body-parser"),
       mongoose  =   require("mongoose"),
-methodOverride  =   require("method-override");
+methodOverride  =   require("method-override"),
+expressSanitizer=   require("express-sanitizer");
 
-mongoose.connect("mongodb://localhost/restful_blog_app",{ useNewUrlParser: true });
-app.set("view engine" , "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("Public"));
-app.use(methodOverride("_method"));
+mongoose.connect("mongodb://localhost/restful_blog_app",{ useNewUrlParser: true,useFindAndModify: false });
+app.set("view engine" , "ejs");        // set default extension of  .ejs
+app.use(bodyParser.urlencoded({extended: true}));   // body parser to access req.body
+app.use(expressSanitizer());          // using sanitizer to handle unusual script 
+app.use(express.static("Public"));   // tell express to serve public directory where is all style file
+app.use(methodOverride("_method")); // it use to override the method="POST" to use PUT , DELETE route
+
 
 var blogSchema = new mongoose.Schema({
     title: String,
@@ -67,6 +70,7 @@ app.get("/blogs/new" , (req,res)=>{
 // ------------------- Create route ------------------------------
 app.post("/blogs" , (req , res)=>{
    
+   req.body.blog.body = req.sanitize(req.body.blog.body);
    Blog.create(req.body.blog , (err , newBlog)=>{
        if(err){
            console.log(err);
@@ -100,6 +104,7 @@ app.get("/blogs/:id" , function(req, res){
 //------------------------- edit route -----------------------
 app.get("/blogs/:id/edit" , function(req , res){
     
+    
     Blog.findById(req.params.id , function(err , foundBlog){
         if(err){
             res.render("/blogs");  // if any err occurs
@@ -114,18 +119,29 @@ app.get("/blogs/:id/edit" , function(req , res){
 //------------------------ udpate route ---- PUT --
 app.put("/blogs/:id" , function(req , res){
    
-   Blog.findByIdAndUpdate(req.params.id , req.body.blog ,{new: true}, (err , udatedBlog)=>{
+   req.body.blog.body = req.sanitize(req.body.blog.body);
+   Blog.findByIdAndUpdate(req.params.id , req.body.blog , (err , udatedBlog)=>{
       if(err){
           res.redirect("/blogs");
       }else {
-          res.redirect("/blogs" + req.params.id);
+          res.redirect("/blogs/" + req.params.id);
       }
        
    });
-    
-   // res.send("update");
+
 });
 
+//---------------------------- Delete route -------------------------------
+app.delete("/blogs/:id" , (req ,res)=>{
+    Blog.findByIdAndRemove(req.params.id , (err)=>{
+          if(err){
+              res.redirect("/blogs/"+req.params.id);
+          } else{
+              res.redirect("/blogs");
+          }
+          
+    });
+});
 
 
 app.listen(process.env.PORT, process.env.IP , function(){
