@@ -10,7 +10,7 @@ var express     =   require("express"),
 mongoose.connect("mongodb://localhost/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine" , "ejs");
-
+app.use(express.static(__dirname+"/public"));
 
 seedDB();
 
@@ -84,7 +84,7 @@ app.get("/campground/:id" , (req, res)=>{
 });
 
 
-//------------------ comments route ------------
+//------------------ comments routes ------------
 
 
 app.get("/campground/:id/comments/new" , function(req , res){
@@ -103,15 +103,20 @@ app.get("/campground/:id/comments/new" , function(req , res){
 app.post("/campground/:id/comments" , function(req, res){
     
     Comment.create(req.body.comments , function(err , comment){
+       
         if (err) {
             console.log(err);
         } else {
+           
+            //finding campgroung
             Campground.findById(req.params.id , function(err , foundCampground){
                 if(err) {
                     console.log(err);
+                    res.redirect("/campground");
+                    
                 } else {
                     
-                    foundCampground.comments.push(comment);
+                    foundCampground.comments.push(comment); //save comments
                         foundCampground.save();
                         
                         res.redirect("/campground/"+req.params.id);
