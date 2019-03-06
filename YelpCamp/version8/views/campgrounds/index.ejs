@@ -1,0 +1,37 @@
+<% include ../partials/header %>
+
+
+
+
+<div class="container">
+<!-- ########################### header ################### -->
+<header class="jumbotron">
+    <div class="container">
+         <h1>Welcome To YelpCamp!</h1>
+        <a class="btn btn-lg btn-primary " href="/campground/new">Add new campground </a>
+    </div>
+</header>
+<!-- xxx header ends xxxxx -->
+
+<div class="row text-center" style="display:flex; flex-wrap:wrap;">
+     <% campGrounds.forEach((camp)=>{ %>
+         <div class="col-md-4 col-sm-12">
+             
+             <div class="thumbnail">
+                 <img src= <%= camp.image %> >
+                 <div class="caption">
+                     <h4 ><%= camp.name %></h4>
+                 </div>
+                 <p>
+                     <a href="/campground/<%= camp._id%>" class="btn btn-lg btn-primary">More Info</a>
+                 </p>
+             </div>
+                    
+         </div>
+     <% });%>  <!-- Loops -->
+</div>
+ 
+<!-- ######################### main container ends ###################### -->    
+</div>
+
+<% include ../partials/footer %>
